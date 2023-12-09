@@ -1,11 +1,13 @@
-import { Button } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
+import ReplayIcon from '@mui/icons-material/Replay';
+import { Button, Tooltip } from '@mui/material';
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 import React, { useState } from 'react';
 import TextEditor from '../../components/TextEditor/TextEditor';
-import Box from '@mui/material/Box';
-import MenuItem from '@mui/material/MenuItem';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 const Home = () => {
   const [inputValues, setInputValues] = useState({
     input1: '',
@@ -94,54 +96,87 @@ const Home = () => {
   ];
   return (
     <div className="container mt-4">
-      <div className="row ">
-        <div className="d-flex flex-column gap-4 col-4">
-        <TextField
-          id="outlined-select-post-type"
-          select
-          label="Select Type"
-          defaultValue="Blog"
-          helperText="Please select your Post type"
-        >
-          {articalType.map((option) => (
-            <MenuItem key={option.value} value={option.value}>
-              {option.label}
-            </MenuItem>
-          ))}
-        </TextField>
-        <TextField
-          id="outlined-select-action"
-          select
-          label="Select Action"
-          defaultValue="Action"
-          helperText="Please select your action"
-        >
-          {actions.map((option) => (
-            <MenuItem key={option.value} value={option.value}>
-              {option.label}
-            </MenuItem>
-          ))}
-        </TextField>
-        <TextField
-          id="outlined-select-Length"
-          select
-          label="Select Length"
-          defaultValue="Length"
-          helperText="Please select your Length"
-        >
-          {size.map((option) => (
-            <MenuItem key={option.value} value={option.value}>
-              {option.label}
-            </MenuItem>
-          ))}
-        </TextField>
+      <div className="row border border-2 shadow p-4 mb-5 bg-body rounded mb-4">
+        <div className="d-flex flex-column gap-4 col-2 border border-1 shadow-sm p-4 ">
+          <div className="d-flex gap-1 align-items-center">
+            <TextField
+              id="outlined-select-post-type"
+              select
+              label="Select Type"
+              defaultValue="Blog"
+              // helperText="Please select your Post type"
+              size="small"
+              className="w-100"
+            >
+              {articalType.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </TextField>
+            <Tooltip title="Post type" placement="top-start">
+              ?
+            </Tooltip>
+          </div>
+          <div className="d-flex gap-1 align-items-center">
+            <TextField
+              id="outlined-select-action"
+              select
+              label="Select Action"
+              defaultValue="Action"
+              // helperText="Please select your action"
+              size="small"
+              className="w-100"
+            >
+              {actions.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </TextField>
+            <Tooltip title="Select Your Action" placement="top-start">
+              ?
+            </Tooltip>
+          </div>
+          <div className="d-flex gap-1 align-items-center">
+            <TextField
+              id="outlined-select-Length"
+              select
+              label="Select Length"
+              defaultValue="Length"
+              // helperText="Please select your Length"
+              size="small"
+              className="w-100"
+            >
+              {size.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </TextField>
+            <Tooltip title="Select Your Action" placement="top-start">
+              ?
+            </Tooltip>
+          </div>
 
-        <div className="d-flex justify-content-between">
-        <FormControlLabel control={<Checkbox />} label="Add Heading" />
-        <FormControlLabel control={<Checkbox />} label="Add List" />
+          <FormControlLabel
+            control={<Checkbox />}
+            label="Add Heading"
+            sx={{
+              '& .MuiSvgIcon-root': { fontSize: 20 },
+              '& .MuiFormControlLabel-label': { fontSize: 14 },
+            }}
+          />
+          <FormControlLabel
+            control={<Checkbox />}
+            label="Add List"
+            sx={{
+              '& .MuiSvgIcon-root': { fontSize: 20 },
+              '& .MuiFormControlLabel-label': { fontSize: 14 },
+            }}
+          />
         </div>
-        </div>
-        <div className="col-8 ">
+        <div className="col-10 ms-auto  p-3  border border-1  shadow-sm">
           <TextField
             label="Multiline 1"
             multiline
@@ -174,13 +209,51 @@ const Home = () => {
           )}
 
           <div className="d-flex gap-3 justify-content-center my-3">
-            <Button variant="contained" onClick={combineInputValues}>
+            <Button
+              variant="contained"
+              onClick={combineInputValues}
+              style={{
+                borderRadius: 30,
+                paddingInline: 25,
+                paddingTop: 10,
+                paddingBottom: 10,
+                backgroundColor: 'black',
+                fontSize: 15,
+              }}
+            >
               Submit
             </Button>
-            <Button variant="contained" onClick={toggleInput3}>
-              Add More
+
+            <Button
+              variant="contained"
+              onClick={toggleInput3}
+              startIcon={showInput3 ? <RemoveIcon /> : <AddIcon />}
+              style={{
+                borderRadius: 30,
+                paddingInline: 25,
+                paddingTop: 10,
+                paddingBottom: 10,
+                backgroundColor: 'black',
+                fontSize: 15,
+                opacity: showInput3 ? '25%' : '100%', // Set opacity based on showInput3
+              }}
+            >
+              {showInput3 ? 'remove' : 'Add More'}
             </Button>
-            <Button variant="contained" onClick={addAgain}>
+
+            <Button
+              variant="contained"
+              style={{
+                borderRadius: 30,
+                paddingInline: 25,
+                paddingTop: 10,
+                paddingBottom: 10,
+                backgroundColor: 'black',
+                fontSize: 15,
+              }}
+              startIcon={<ReplayIcon />}
+              onClick={addAgain}
+            >
               Add Again
             </Button>
           </div>
