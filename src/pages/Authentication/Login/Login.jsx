@@ -48,8 +48,8 @@ const Login = () => {
           style={{
             borderRadius: 30,
             paddingInline: 25,
-            paddingTop: 10,
-            paddingBottom: 10,
+            paddingTop: 7,
+            paddingBottom: 7,
             backgroundColor: 'black',
             fontSize: 15,
           }}
