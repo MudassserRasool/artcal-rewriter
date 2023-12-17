@@ -8,6 +8,7 @@ import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 import React, { useState } from 'react';
 import TextEditor from '../../components/TextEditor/TextEditor';
+import Navbar from '../../components/Navbar/Navbar';
 const Home = () => {
   const [inputValues, setInputValues] = useState({
     input1: '',
@@ -17,7 +18,10 @@ const Home = () => {
 
   const [showInput3, setShowInput3] = useState(false);
   const [isEditable, setIsEditable] = useState(true);
+ 
+  const [isButtonClicked, setIsButtonClicked] = useState(false);
 
+const [result, setResult] = useState()
   const [combinedData, setCombinedData] = useState('');
 
   const handleInputChange = (event, fieldName) => {
@@ -29,14 +33,40 @@ const Home = () => {
     }
   };
 
-  const combineInputValues = () => {
+  const combineInputValues = async () => {
     if (isEditable) {
-      setCombinedData(
-        (prevCombinedData) =>
-          `${inputValues.input1}\n${inputValues.input2}\n${inputValues.input3}`
-      );
+      const inputData = {
+        input1: inputValues.input1 || '',
+        input2: inputValues.input2 || '',
+        input3: showInput3 ? inputValues.input3 || '' : '',
+      };
+  
+      try {
+        const response = await fetch('http://127.0.0.1:8000/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(inputData),
+        });
+  
+        const data = await response.json();
+        if (response.ok) {
+          setCombinedData(data.generated_text); // Set generated text in state
+        } else {
+          // Handle errors if needed
+          console.error('Error:', data);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
+  
       setIsEditable(false); // Disable editability after submission
     }
+
+
+    setIsButtonClicked(true); // Set the button clicked state
+    setIsEditable(false); // Disable editability after submission
   };
 
   const toggleInput3 = () => {
@@ -95,9 +125,11 @@ const Home = () => {
     },
   ];
   return (
-    <div className="container mt-4">
+   <div>
+<Navbar/>
+<div className="container mt-4">
       <div className="row border border-2 shadow p-4 mb-5 bg-body rounded mb-4">
-        <div className="d-flex flex-column gap-4 col-2 border border-1 shadow-sm p-4 ">
+        <div className="d-flex flex-column gap-4 col-2 p-4 ">
           <div className="d-flex gap-1 align-items-center">
             <TextField
               id="outlined-select-post-type"
@@ -176,7 +208,7 @@ const Home = () => {
             }}
           />
         </div>
-        <div className="col-10 ms-auto  p-3  border border-1  shadow-sm">
+        <div className="col-10 ms-auto  p-3  border-start border-1 ">
           <TextField
             label="Multiline 1"
             multiline
@@ -219,6 +251,7 @@ const Home = () => {
                 paddingBottom: 10,
                 backgroundColor: 'black',
                 fontSize: 15,
+                opacity: isButtonClicked ? 0.25 : 1,
               }}
             >
               Submit
@@ -261,8 +294,10 @@ const Home = () => {
       </div>
       {/* Input fields */}
 
-      <TextEditor combinedData={combinedData} />
+      {<TextEditor combinedData={combinedData} />}
+      {/* <TextEditor /> */}
     </div>
+   </div>
   );
 };
 

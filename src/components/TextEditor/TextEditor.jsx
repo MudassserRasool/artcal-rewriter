@@ -3,6 +3,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import MUIRichTextEditor from 'mui-rte';
 import React, { useEffect, useState } from 'react';
 import styles from './TextEditor.module.css';
+import ResultProgresssbar from '../ResultProgresssbar/ResultProgresssbar';
 
 const TextEditor = React.memo(({ combinedData }) => {
   const [data, setData] = useState();
@@ -66,6 +67,7 @@ const TextEditor = React.memo(({ combinedData }) => {
   });
 
   return (
+    <div>
     <div className="col-12 border border-1  shadow-sm rounded">
       <div className={styles.editorBox}>
       <Select value={headingLevel}  onChange={handleHeadingChange} style={{height:30, marginTop:23, }}>
@@ -116,6 +118,11 @@ const TextEditor = React.memo(({ combinedData }) => {
           Check Plagiarism
         </Button>
       </div>
+
+
+    </div>
+    <ResultProgresssbar />
+
     </div>
   );
 });
