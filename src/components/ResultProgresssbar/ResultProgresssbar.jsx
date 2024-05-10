@@ -22,21 +22,7 @@ const ResultProgresssbar = () => {
 
 
 
-        <div>
-          <div className="progress">
-            <div
-              className="progress-bar"
-              role="progressbar"
-              style={{ width: '60%' }}
-              aria-valuenow={60}
-              aria-valuemin={0}
-              aria-valuemax={100}
-            />
-          </div>
-
-          <h3 className='text-center'>Seo</h3>
-          <h1 className='text-center'>60 %</h1>
-        </div>
+      
       </div>
     </div>
   );

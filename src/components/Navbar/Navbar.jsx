@@ -1,6 +1,6 @@
+import LoginIcon from '@mui/icons-material/Login';
 import React from 'react';
 import { Link } from 'react-router-dom';
-
 const Navbar = () => {
   return (
     <div>
@@ -37,6 +37,7 @@ const Navbar = () => {
                   aria-current="page"
                   to="/login"
                 >
+                  <LoginIcon className="me-1" />
                   Login
                 </Link>
               </li>

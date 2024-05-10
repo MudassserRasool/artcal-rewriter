@@ -1,14 +1,17 @@
-import { Button, Typography, MenuItem, Select } from '@mui/material';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import FileCopyIcon from '@mui/icons-material/FileCopy';
+import ReplayIcon from '@mui/icons-material/Replay';
+import { Button, MenuItem, Select, TextField } from '@mui/material';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import MUIRichTextEditor from 'mui-rte';
 import React, { useEffect, useState } from 'react';
 import styles from './TextEditor.module.css';
-import ResultProgresssbar from '../ResultProgresssbar/ResultProgresssbar';
 
 const TextEditor = React.memo(({ combinedData }) => {
   const [data, setData] = useState();
   const [headingLevel, setHeadingLevel] = useState('header-six'); // Default heading level is h1
-
+  const [checkPlagrisam, setcheckPlagrisam] = useState(false);
+  const [checkSEO, setcheckSEO] = useState(false);
+  const [keyword, setkeyword] = useState('');
   useEffect(() => {
     setData({
       blocks: [
@@ -66,63 +69,197 @@ const TextEditor = React.memo(({ combinedData }) => {
     },
   });
 
+  const handelCheckPlagiarism = () => {
+    setcheckPlagrisam(true);
+  };
+  const handelCheckSEO = () => {
+    setcheckSEO(true);
+  };
+
+  const handleCopy = () => {
+    const emptyValue = {
+      blocks: [
+        {
+          key: 'newBlock',
+          text: 'sdas',
+          type: 'unstyled',
+          depth: 0,
+          inlineStyleRanges: [],
+          entityRanges: [],
+          data: {},
+        },
+      ],
+      entityMap: {},
+    };
+    emptyValue.blocks = data.blocks;
+    const textToCopy = JSON.stringify(emptyValue);
+    navigator.clipboard.writeText(textToCopy);
+  };
+
   return (
-    <div>
-    <div className="col-12 border border-1  shadow-sm rounded">
-      <div className={styles.editorBox}>
-      <Select value={headingLevel}  onChange={handleHeadingChange} style={{height:30, marginTop:23, }}>
-            <MenuItem value="header-one">Heading 1</MenuItem>
-            <MenuItem value="header-two">Heading 2</MenuItem>
-            <MenuItem value="header-three">Heading 3</MenuItem>
-            <MenuItem value="header-four">Heading 4</MenuItem>
-            <MenuItem value="header-five">Heading 5</MenuItem>
-            <MenuItem value="header-six">Heading 6</MenuItem>
+    <div className="d-flex flex-column flex-md-row mb-2">
+      <div className="col col-md-9 border border-1  shadow-sm rounded-start">
+        <div className={styles.editorBox}>
+          <Select
+            value={headingLevel}
+            onChange={handleHeadingChange}
+            style={{ height: 30, marginTop: 23, borderColor: 'none' }}
+          >
+            <MenuItem value="header-one">h1</MenuItem>
+            <MenuItem value="header-two">h2</MenuItem>
+            <MenuItem value="header-three">h3</MenuItem>
+            <MenuItem value="header-four">h4</MenuItem>
+            <MenuItem value="header-five">h5</MenuItem>
+            <MenuItem value="header-six">h6</MenuItem>
           </Select>
-        <ThemeProvider theme={myTheme}>
-       
+          <ThemeProvider theme={myTheme}>
+            <MUIRichTextEditor
+              value={JSON.stringify(data)}
+              label="Type something here..."
+              onSave={save}
+              inlineToolbar={false}
+              controls={[
+                'title',
+                'copy',
+                'bold',
+                'italic',
+                'underline',
+                'strikethrough',
+                'highlight',
+                'undo',
+                'redo',
+                'link',
+                'media',
+                'numberList',
+                'bulletList',
+                'quote',
+                'copy',
+              ]}
+              height="500px"
+              className="w-100 bg-danger"
+              customControls={[
+                // Define a custom copy button for the toolbar
+                {
+                  name: 'copy',
+                  icon: (
+                    <FileCopyIcon
+                      icon="file_copy"
+                      tooltip="Copy"
+                      onClick={handleCopy}
+                    />
+                  ),
+                },
+              ]}
+            />
+          </ThemeProvider>
+        </div>
 
-          <MUIRichTextEditor
-            value={JSON.stringify(data)}
-            label="Type something here..."
-            onSave={save}
-            inlineToolbar={false}
-            height="500px"
-            clssName="w-100 bg-danger"
-          />
-        </ThemeProvider>
+        <div className="d-flex justify-content-center gap-2 my-3">
+          <Button
+            variant="contained"
+            onClick={save}
+            style={{
+              borderRadius: 30,
+              paddingInline: 25,
+              paddingTop: 10,
+              paddingBottom: 10,
+              backgroundColor: 'black',
+              fontSize: 15,
+            }}
+          >
+            Save
+          </Button>
+        </div>
       </div>
+      <div className="col col-md-3 border border-1  shadow-sm rounded-end border-start-0 p-3">
+        <div className="my-3">
+          <Button
+            variant="contained"
+            style={{
+              borderRadius: 30,
+              paddingInline: 25,
+              paddingTop: 10,
+              paddingBottom: 10,
+              backgroundColor: 'black',
+              fontSize: 15,
+              marginBottom: 20,
+              marginLeft: 10,
+            }}
+            startIcon={checkPlagrisam && <ReplayIcon />}
+            onClick={handelCheckPlagiarism}
+          >
+            Check Plagiarism
+          </Button>
+          <div className="progress">
+            <div
+              className="progress-bar"
+              role="progressbar"
+              style={{ width: '10%' }}
+              aria-valuenow={10}
+              aria-valuemin={0}
+              aria-valuemax={100}
+            />
+          </div>
+          <h1 className="text-center">10 %</h1>
+        </div>
+        <div className="mt-4 pt-3 border-top">
+          <Button
+            variant="contained"
+            style={{
+              borderRadius: 30,
+              paddingInline: 25,
+              paddingTop: 10,
+              paddingBottom: 10,
+              backgroundColor: 'black',
+              fontSize: 15,
+              marginBottom: 20,
+              marginLeft: 50,
+            }}
+            startIcon={checkSEO && <ReplayIcon />}
+            onClick={handelCheckSEO}
+          >
+            Check SEO
+          </Button>
+          <div className="progress">
+            <div
+              className="progress-bar"
+              role="progressbar"
+              style={{ width: '10%' }}
+              aria-valuenow={10}
+              aria-valuemin={0}
+              aria-valuemax={100}
+            />
+          </div>
+          <h1 className="text-center">10 %</h1>
 
-      <div className="d-flex justify-content-center gap-2 my-3">
-        <Button variant="contained" onClick={save}
-         style={{
-                borderRadius: 30,
-                paddingInline: 25,
-                paddingTop: 10,
-                paddingBottom: 10,
-                backgroundColor: 'black',
-                fontSize: 15,
-              }}
-        >
-          Save
-        </Button>
-        <Button variant="contained"
-         style={{
-                borderRadius: 30,
-                paddingInline: 25,
-                paddingTop: 10,
-                paddingBottom: 10,
-                backgroundColor: 'black',
-                fontSize: 15,
-              }}
-        >
-          Check Plagiarism
-        </Button>
+          {keyword.length < 4 && (
+            <div style={{ fontSize: 12 }} className=" text-danger">
+              Add keyword of at least 4 character
+            </div>
+          )}
+        </div>
+
+        <TextField
+          label="Add Keyword"
+          multiline
+          value={keyword}
+          className="w-100"
+          onChange={(e) => setkeyword(e.target.value)}
+        />
+
+        <div className="shadow mt-3 fw-bold p-3  bg-body rounded">
+          <div>Keyword Density = 10%</div>
+        </div>
+        <div className="shadow-sm  fw-bold p-3 mt-3 bg-body rounded">
+          <div>Add More Keywords </div>
+        </div>
+        <div className="shadow-sm  fw-bold p-3 mt-3 bg-body rounded">
+          <div>Add Keyword in Introduction</div>
+        </div>
+        <div className="shadow-sm  fw-bold p-3 mt-3 bg-body rounded">
+          <div>Use keyword in headings</div>
+        </div>
       </div>
-
-
-    </div>
-    <ResultProgresssbar />
-
     </div>
   );
 });
